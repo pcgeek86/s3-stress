@@ -118,6 +118,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "aws-sdk-account"
+version = "1.37.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "79c052e1028c844279a0f4665d45bee1bc2da14cc4f85dd1255d0fd595c0a462"
+dependencies = [
+ "aws-credential-types",
+ "aws-runtime",
+ "aws-smithy-async",
+ "aws-smithy-http",
+ "aws-smithy-json",
+ "aws-smithy-runtime",
+ "aws-smithy-runtime-api",
+ "aws-smithy-types",
+ "aws-types",
+ "bytes",
+ "http 0.2.12",
+ "once_cell",
+ "regex-lite",
+ "tracing",
+]
+
+[[package]]
 name = "aws-sdk-s3"
 version = "1.42.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -521,6 +543,12 @@ name = "cfg-if"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
+
+[[package]]
+name = "colorize"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dc17e449bc7854c50b943d113a98bc0e01dc6585d2c66eaa09ca645ebd8a7e62"
 
 [[package]]
 name = "const-oid"
@@ -1466,8 +1494,10 @@ version = "0.1.0"
 dependencies = [
  "aws-config",
  "aws-runtime",
+ "aws-sdk-account",
  "aws-sdk-s3",
  "aws-types",
+ "colorize",
  "dotenvy",
  "futures",
  "inquire",
