@@ -1,6 +1,6 @@
 [package]
 name = "s3-stress"
-version = "0.1.0"
+version = "0.1.5"
 edition = "2021"
 author = "Trevor Sullivan <trevor@trevorsullivan.net>"
 description = "An interactive CLI tool that lets you perform various operations against the Amazon S3 service APIs."
@@ -21,3 +21,10 @@ inquire = "0.7.5"
 regex = "1.10.6"
 tokio = { version = "1.39.2", features = ["full"] }
 uuid = { version = "1.10.0", features = ["v4"] }
+
+[profile.release]
+strip = true
+opt-level = "z"
+lto = true
+codegen-units = 1
+# panic = "abort"
