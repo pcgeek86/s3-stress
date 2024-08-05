@@ -38,7 +38,7 @@ async fn operation_select() {
     let region_list = get_aws_regions(acct_client_arc.clone()).await.as_arc();
 
     loop {
-        let operation_list = vec!["Cleanup bucket", "Create objects", "Create bucket", "Delete bucket"];
+        let operation_list = vec!["Cleanup bucket", "Create objects", "Create bucket", "Delete bucket", "List objects"];
         let selected_operation = inquire::Select::new("Select an operation", operation_list).prompt().unwrap();
     
         match selected_operation {
@@ -60,9 +60,40 @@ async fn operation_select() {
                 let s3_client = get_s3_client_for_bucket(s3_client_arc.clone(), aws_cfg.clone(), &bucket_name).await;
                 delete_bucket(s3_client, &bucket_name).await;
             }
+            "List objects" => {
+                let bucket_name = select_bucket(s3_client_arc.clone()).await;
+                let s3_client = get_s3_client_for_bucket(s3_client_arc.clone(), aws_cfg.clone(), &bucket_name).await;
+                operation_list_objects(s3_client, &bucket_name).await;
+            }
             "q" | "quit" | "exit" => { std::process::exit(0) }
             _ => { }
         }
+    }
+}
+
+async fn operation_list_objects(s3_client: Client, bucket_name: &String) {
+    let object_list_result = s3_client.list_objects_v2()
+        .bucket(bucket_name)
+        .send().await;
+
+    if object_list_result.as_ref().is_err() {
+        let sdk_err = object_list_result.err().unwrap().into_service_error();
+        let svc_err = sdk_err.meta().message();
+        let message = svc_err.unwrap().to_string();
+        println!("Error occurred while listing objects: {0}", message.red());
+        return;
+    }
+
+    let object_list = object_list_result.unwrap().contents;
+    if object_list.is_none() {
+        println!("{0}", "No objects found in this bucket".blue());
+        return;
+    }
+    let object_list = object_list.unwrap();
+    println!("There are {0} objects in this bucket", object_list.len());
+
+    for object in object_list {
+        println!("{0:>25} Size: {1}", object.key.unwrap(), object.size.unwrap());
     }
 }
 
