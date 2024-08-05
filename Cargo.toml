@@ -1,6 +1,6 @@
 [package]
 name = "s3-stress"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 author = "Trevor Sullivan <trevor@trevorsullivan.net>"
 description = "An interactive CLI tool that lets you perform various operations against the Amazon S3 service APIs."
